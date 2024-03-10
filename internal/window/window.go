@@ -6,36 +6,38 @@ import (
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/ross96D/finder/internal"
-	"github.com/ross96D/finder/internal/textbox"
+	"github.com/ross96D/finder/internal/font"
+	"github.com/ross96D/finder/internal/inputbox"
 )
 
 const (
 	__width__  = 800
 	__heigth__ = 450
+
+	// TODO implement a more dynamic way to set the font size
+	FONT_SIZE = 25
 )
 
 type Window struct {
-	textBox textbox.Textbox
+	input inputbox.InputBox
 
 	drawFps bool
 }
 
 func New() Window {
-	textBox := textbox.New(internal.Position{X: 32, Y: 32}, 60, 60, "Hello mom", internal.Position{X: 12, Y: 12})
-	return Window{textBox: textBox, drawFps: true}
+	input := inputbox.New(rl.LightGray, rl.Black, FONT_SIZE, internal.Position{X: 8, Y: 8})
+	input.IsFocus = true
+	return Window{input: input, drawFps: true}
 }
 
 func (w *Window) Init() {
-	w.textBox.Width = __width__/2 - 50
-	w.textBox.Height = 180
-	w.textBox.BackgroundColor = rl.LightGray
-	w.textBox.SetPosition(internal.Position{X: 20, Y: 40})
 
 	rl.SetTargetFPS(60)
 	rl.SetConfigFlags(rl.FlagWindowHidden)
 	rl.InitWindow(__width__, __heigth__, "raylib [core] example - basic window")
 	defer rl.CloseWindow()
 
+	font.Load(FONT_SIZE)
 	centerWindow(__width__, __heigth__)
 
 	rl.ClearWindowState(rl.FlagWindowHidden)
@@ -52,14 +54,15 @@ func (w *Window) Init() {
 		rl.EndDrawing()
 	}
 
+	font.Unload()
 	rl.CloseWindow()
 }
 
 func (w *Window) Draw() {
 	if w.drawFps {
-		rl.DrawFPS(__width__-100, 0)
+		rl.DrawFPS(__width__-80, 0)
 	}
-	w.textBox.Draw()
+	w.input.Draw()
 }
 
 func centerWindow(windowWidth, windowHeigth int) {

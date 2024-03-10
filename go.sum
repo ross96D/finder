@@ -1,6 +1,8 @@
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/ebitengine/purego v0.6.0-alpha.1.0.20231122024802-192c5e846faa h1:Ik7QikRgeH+bFOfAcMpttCbs6XxWXxCLXMm4awxtOXk=
 github.com/ebitengine/purego v0.6.0-alpha.1.0.20231122024802-192c5e846faa/go.mod h1:ah1In8AOtksoNK6yk5z1HTJeUkC1Ez4Wk2idgGslMwQ=
+github.com/flopp/go-findfont v0.1.0 h1:lPn0BymDUtJo+ZkV01VS3661HL6F4qFlkhcJN55u6mU=
+github.com/flopp/go-findfont v0.1.0/go.mod h1:wKKxRDjD024Rh7VMwoU90i6ikQRCr+JTHB5n4Ejkqvw=
 github.com/gen2brain/raylib-go/raylib v0.0.0-20240227114648-c3665eb9abf8 h1:KdLtsrVX5K+9XmHawsV/ivkHUjS7cP4dWxcYUwfoY4U=
 github.com/gen2brain/raylib-go/raylib v0.0.0-20240227114648-c3665eb9abf8/go.mod h1:P/hDjVwz/9fhR0ww3+umzDpDA7Bf7Tce4xNChHIEFqE=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
