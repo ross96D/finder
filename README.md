@@ -6,3 +6,6 @@ The thing is i am not very confortable on how vscode integrate with ripgrep. The
 
 ## UI mock
 ![Alt text](ui_mock.png)
+
+## TODOS
+- Make a configuration package to access global values
