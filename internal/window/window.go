@@ -1,6 +1,9 @@
 package window
 
 import (
+	"fmt"
+	"time"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/ross96D/finder/internal"
 	"github.com/ross96D/finder/internal/textbox"
@@ -13,14 +16,22 @@ const (
 
 type Window struct {
 	textBox textbox.Textbox
+
+	drawFps bool
 }
 
 func New() Window {
 	textBox := textbox.New(internal.Position{X: 32, Y: 32}, 60, 60, "Hello mom", internal.Position{X: 12, Y: 12})
-	return Window{textBox: textBox}
+	return Window{textBox: textBox, drawFps: true}
 }
 
 func (w *Window) Init() {
+	w.textBox.Width = __width__/2 - 50
+	w.textBox.Height = 180
+	w.textBox.BackgroundColor = rl.LightGray
+	w.textBox.SetPosition(internal.Position{X: 20, Y: 40})
+
+	rl.SetTargetFPS(60)
 	rl.SetConfigFlags(rl.FlagWindowHidden)
 	rl.InitWindow(__width__, __heigth__, "raylib [core] example - basic window")
 	defer rl.CloseWindow()
@@ -29,12 +40,7 @@ func (w *Window) Init() {
 
 	rl.ClearWindowState(rl.FlagWindowHidden)
 
-	rl.SetTargetFPS(60)
-
-	w.textBox.Width = __width__/2 - 50
-	w.textBox.Height = 180
-	w.textBox.BackgroundColor = rl.LightGray
-	w.textBox.SetPosition(internal.Position{X: 20, Y: 40})
+	fmt.Printf("Start up time: %s\n", time.Since(internal.StartUpTime).String())
 
 	for !rl.WindowShouldClose() {
 
@@ -50,6 +56,9 @@ func (w *Window) Init() {
 }
 
 func (w *Window) Draw() {
+	if w.drawFps {
+		rl.DrawFPS(__width__-100, 0)
+	}
 	w.textBox.Draw()
 }
 

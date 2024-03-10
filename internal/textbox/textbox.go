@@ -1,7 +1,6 @@
 package textbox
 
 import (
-	"fmt"
 	"image/color"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -21,7 +20,6 @@ type Textbox struct {
 }
 
 func New(pos internal.Position, width int32, heigth int32, text string, textPos internal.Position) Textbox {
-	fmt.Println("GRJKSFAS", text)
 	resp := Textbox{
 		text:         internal.Text{Value: text, FontSize: 20, Color: rl.Black},
 		position:     pos,
