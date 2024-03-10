@@ -1,0 +1,8 @@
+version: 3
+
+tasks:
+  build: go build -o out/finder -ldflags="-s -w" -tags "x11,noaudio" main.go
+
+  run:
+    - task: build
+    - ./out/finder
