@@ -25,9 +25,8 @@ type Window struct {
 }
 
 func New() Window {
-	input := inputbox.New(rl.LightGray, rl.Black, FONT_SIZE, internal.Position{X: 8, Y: 8})
-	input.IsFocus = true
-	return Window{input: input, drawFps: true}
+
+	return Window{drawFps: true}
 }
 
 func (w *Window) Init() {
@@ -38,6 +37,10 @@ func (w *Window) Init() {
 	defer rl.CloseWindow()
 
 	font.Load(FONT_SIZE)
+	input := inputbox.New(rl.LightGray, rl.Black, FONT_SIZE, internal.Position{X: 8, Y: 8})
+	input.ChangeFocus()
+	w.input = input
+
 	centerWindow(__width__, __heigth__)
 
 	rl.ClearWindowState(rl.FlagWindowHidden)
@@ -45,6 +48,15 @@ func (w *Window) Init() {
 	fmt.Printf("Start up time: %s\n", time.Since(internal.StartUpTime).String())
 
 	for !rl.WindowShouldClose() {
+		// time counter for the application..
+		// for simplicity sake the time will be the frames
+		// (
+		//	this can cause issues if the frames drop..
+		// 	but maybe we can craft a good solution even with this handicap
+		// )
+		internal.Time++
+
+		w.Update()
 
 		rl.BeginDrawing()
 		{
@@ -63,6 +75,10 @@ func (w *Window) Draw() {
 		rl.DrawFPS(__width__-80, 0)
 	}
 	w.input.Draw()
+}
+
+func (w *Window) Update() {
+	w.input.Update()
 }
 
 func centerWindow(windowWidth, windowHeigth int) {

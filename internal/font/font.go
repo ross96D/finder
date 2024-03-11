@@ -23,3 +23,8 @@ func Load(size int32) {
 func Unload() {
 	rl.UnloadFont(font)
 }
+
+func MessureText(text string, size int) (X float32, Y float32) {
+	v := rl.MeasureTextEx(font, text, float32(size), 0)
+	return float32(v.X), v.Y
+}

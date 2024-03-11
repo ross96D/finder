@@ -17,3 +17,7 @@ type Rectangle struct {
 func (r *Rectangle) Rect() rl.Rectangle {
 	return rl.NewRectangle(float32(r.Pos.X), float32(r.Pos.Y), float32(r.Width), float32(r.Height))
 }
+
+type AppTime uint64
+
+var Time AppTime
