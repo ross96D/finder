@@ -8,4 +8,7 @@ The thing is i am not very confortable on how vscode integrate with ripgrep. The
 ![Alt text](ui_mock.png)
 
 ## TODOS
-- Make a configuration package to access global values
+- Add List of Matches component and Preview Component
+- (input text) Add key shortcuts implementation
+- (input text) Add text highligther
+- (input text) Make a configuration package to access global values
