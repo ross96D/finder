@@ -1,7 +1,6 @@
 package inputbox
 
 import (
-	"fmt"
 	"image/color"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -48,6 +47,10 @@ func (i *InputBox) Rect() rl.Rectangle {
 	return i.rect.Rect()
 }
 
+func (i *InputBox) Text() string {
+	return i.text.Value
+}
+
 func (i *InputBox) ChangeFocus() {
 	i.isFocus = !i.isFocus
 	if i.isFocus {
@@ -63,75 +66,26 @@ func (i *InputBox) Draw() {
 	i.blink.Draw()
 }
 
-func (i *InputBox) Update() {
+func (i *InputBox) Update(msg key.Key) {
 	if !i.isFocus {
 		return
 	}
-
-	keyInput := key.Poll()
-keysFor:
-	for keyInput != key.None {
-
-		switch keyInput {
-		case key.Backspace:
-			if i.text.Value == "" {
-				break keysFor
-			}
-			lastChar := i.text.Value[len(i.text.Value)-1]
-			i.text.Value = i.text.Value[:len(i.text.Value)-1]
-			copy := i.text
-			copy.Value = string(rune(lastChar))
-			i.blink.Move(copy, false)
-			break keysFor
-
-		case key.Delete:
-			fmt.Println("Delete is not implemented")
-			break keysFor
-
-		case key.CtrlBackspace:
-			fmt.Println("CtrlBackspace is not implemented")
-			break keysFor
-
-		case key.CtrlDelete:
-			fmt.Println("CtrlDelete is not implemented")
-			break keysFor
-
-		case key.MoveWordBackward:
-			fmt.Println("MoveWordBackward is not implemented")
-			break keysFor
-
-		case key.MoveWordFoward:
-			fmt.Println("MoveWordFoward is not implemented")
-			break keysFor
-
-		case key.MoveBackward:
-			fmt.Println("MoveBackward is not implemented")
-			break keysFor
-
-		case key.MoveFoward:
-			fmt.Println("MoveFoward is not implemented")
-			break keysFor
-
-		case key.MoveUp:
-			fmt.Println("MoveUp is not implemented")
-			break keysFor
-
-		case key.MoveDown:
-			fmt.Println("MoveDown is not implemented")
-			break keysFor
-
-		case key.None:
-			break keysFor
-
-		default:
-			if keyInput >= 1 && keyInput <= 125 {
-				s := string(rune(keyInput))
-				i.text.Value += s
-				copy := i.text
-				copy.Value = s
-				i.blink.Move(copy, true)
-			}
+	if msg == key.Backspace {
+		if i.text.Value == "" {
+			return
 		}
-		keyInput = key.Poll()
+		lastChar := i.text.Value[len(i.text.Value)-1]
+		i.text.Value = i.text.Value[:len(i.text.Value)-1]
+		copy := i.text
+		copy.Value = string(rune(lastChar))
+		i.blink.Move(copy, false)
+	}
+
+	if msg >= 1 && msg <= 125 {
+		s := string(rune(msg))
+		i.text.Value += s
+		copy := i.text
+		copy.Value = s
+		i.blink.Move(copy, true)
 	}
 }

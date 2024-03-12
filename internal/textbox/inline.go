@@ -8,7 +8,7 @@ import (
 )
 
 // TODO add optional borders
-type Textbox struct {
+type TextboxInline struct {
 	BackgroundColor color.RGBA
 
 	text         internal.Text
@@ -17,9 +17,9 @@ type Textbox struct {
 	rect internal.Rectangle
 }
 
-func New(pos internal.Position, width int32, heigth int32, text string, textPos internal.Position) Textbox {
-	resp := Textbox{
-		text:         internal.Text{Value: text, FontSize: 20, Color: rl.Black},
+func NewInline(pos internal.Position, width int32, heigth int32, text string, textPos internal.Position) TextboxInline {
+	resp := TextboxInline{
+		text:         internal.Text{Value: text, FontSize: 25, Color: rl.Black},
 		textRelative: textPos,
 		rect: internal.Rectangle{
 			Pos:    pos,
@@ -31,29 +31,29 @@ func New(pos internal.Position, width int32, heigth int32, text string, textPos 
 	return resp
 }
 
-func (t *Textbox) SetText(text string) {
+func (t *TextboxInline) SetText(text string) {
 	t.text.Value = text
 }
 
-func (t *Textbox) Rect() rl.Rectangle {
+func (t *TextboxInline) Rect() rl.Rectangle {
 	return t.rect.Rect()
 }
 
-func (t *Textbox) SetTextPosition(pos internal.Position) {
+func (t *TextboxInline) SetTextPosition(pos internal.Position) {
 	t.textRelative = pos
 }
 
-func (t *Textbox) SetPosition(pos internal.Position) {
+func (t *TextboxInline) SetPosition(pos internal.Position) {
 	t.rect.Pos = pos
 	t.updateTextRelative()
 }
 
-func (t *Textbox) updateTextRelative() {
+func (t *TextboxInline) updateTextRelative() {
 	t.text.Position.X = t.rect.Pos.X + t.textRelative.X
 	t.text.Position.Y = t.rect.Pos.Y + t.textRelative.Y
 }
 
-func (t Textbox) Draw() {
+func (t TextboxInline) Draw() {
 	rl.DrawRectangle(t.rect.Pos.X, t.rect.Pos.Y, t.rect.Width, t.rect.Height, t.BackgroundColor)
 	t.text.Draw()
 }

@@ -14,6 +14,8 @@ const (
 	CtrlDelete
 	Delete
 
+	Enter
+
 	MoveWordFoward
 	MoveWordBackward
 	MoveFoward
@@ -26,20 +28,20 @@ const (
 func Poll() Key {
 	char := rl.GetCharPressed()
 	if char != 0 {
-		return Key(char)
+		return check(Key(char))
 	}
 	if rl.IsKeyDown(rl.KeyLeftControl) || rl.IsKeyDown(rl.KeyLeftControl) {
 		if rl.IsKeyDown(rl.KeyBackspace) {
-			return CtrlBackspace
+			return check(CtrlBackspace)
 		}
 		if rl.IsKeyDown(rl.KeyDelete) {
-			return CtrlDelete
+			return check(CtrlDelete)
 		}
 		if rl.IsKeyDown(rl.KeyLeft) {
-			return MoveWordBackward
+			return check(MoveWordBackward)
 		}
 		if rl.IsKeyDown(rl.KeyRight) {
-			return MoveWordFoward
+			return check(MoveWordFoward)
 		}
 		return None
 	}
@@ -60,6 +62,9 @@ func Poll() Key {
 	}
 	if rl.IsKeyDown(rl.KeyDown) {
 		return check(MoveFoward)
+	}
+	if rl.IsKeyDown(rl.KeyEnter) {
+		return check(Enter)
 	}
 	return None
 }
