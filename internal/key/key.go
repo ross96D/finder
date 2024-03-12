@@ -7,6 +7,37 @@ import (
 
 type Key int32
 
+func (k Key) isUp() bool {
+	switch k {
+	case None:
+		return false
+	case CtrlBackspace:
+		return (rl.IsKeyUp(rl.KeyLeftControl) || rl.IsKeyUp(rl.KeyRightControl)) && rl.IsKeyUp(rl.KeyBackspace)
+	case Backspace:
+		return rl.IsKeyUp(rl.KeyBackspace)
+	case CtrlDelete:
+		return (rl.IsKeyUp(rl.KeyLeftControl) || rl.IsKeyUp(rl.KeyRightControl)) && rl.IsKeyUp(rl.KeyDelete)
+	case Delete:
+		return rl.IsKeyUp(rl.KeyDelete)
+	case Enter:
+		return rl.IsKeyUp(rl.KeyEnter)
+	case MoveWordFoward:
+		return (rl.IsKeyUp(rl.KeyLeftControl) || rl.IsKeyUp(rl.KeyRightControl)) && rl.IsKeyUp(rl.KeyRight)
+	case MoveWordBackward:
+		return (rl.IsKeyUp(rl.KeyLeftControl) || rl.IsKeyUp(rl.KeyRightControl)) && rl.IsKeyUp(rl.KeyLeft)
+	case MoveFoward:
+		return rl.IsKeyUp(rl.KeyRight)
+	case MoveBackward:
+		return rl.IsKeyUp(rl.KeyLeft)
+	case MoveUp:
+		return rl.IsKeyUp(rl.KeyUp)
+	case MoveDown:
+		return rl.IsKeyUp(rl.KeyDown)
+	default:
+		return rl.IsKeyUp(int32(k))
+	}
+}
+
 const (
 	None Key = iota + 1000
 	CtrlBackspace
@@ -26,6 +57,10 @@ const (
 
 // !!!! this model only allows for one consumer
 func Poll() Key {
+	if prev.repeats > 0 && prev.isUp() {
+		prev.repeats = 0
+	}
+
 	char := rl.GetCharPressed()
 	if char != 0 {
 		return check(Key(char))
@@ -58,10 +93,10 @@ func Poll() Key {
 		return check(MoveFoward)
 	}
 	if rl.IsKeyDown(rl.KeyUp) {
-		return check(MoveBackward)
+		return check(MoveUp)
 	}
 	if rl.IsKeyDown(rl.KeyDown) {
-		return check(MoveFoward)
+		return check(MoveDown)
 	}
 	if rl.IsKeyDown(rl.KeyEnter) {
 		return check(Enter)
@@ -71,7 +106,21 @@ func Poll() Key {
 
 type prevkey struct {
 	Key
-	Time internal.AppTime
+	Time    internal.AppTime
+	repeats int
+}
+
+func (p prevkey) waitTime() internal.AppTime {
+	switch p.repeats {
+	case 0:
+		return 10
+	case 1:
+		return 10
+	case 2:
+		return 5
+	default:
+		return 0
+	}
 }
 
 var prev prevkey
@@ -81,13 +130,14 @@ func check(key Key) Key {
 	if prev.Key != key {
 		prev.Key = key
 		prev.Time = internal.Time
+		prev.repeats = 0
 		return key
 	}
 	passedTime := internal.Time - prev.Time
-	if passedTime < 10 {
+	if passedTime <= prev.waitTime() {
 		return None
 	}
-
+	prev.repeats += 1
 	prev.Time = internal.Time
 	return key
 }
