@@ -1,8 +1,8 @@
 version: 3
 
 tasks:
-  build: go build -o out/finder -ldflags="-s -w" -tags "x11,noaudio" main.go
+  run:b:
+    - cargo b
+    - SLINT_BACKEND=winit-software target/debug/slint-test
 
-  run:
-    - task: build
-    - ./out/finder
+  run: SLINT_BACKEND=winit-software target/debug/slint-test

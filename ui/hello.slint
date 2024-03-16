@@ -1,0 +1,64 @@
+
+import { Button, HorizontalBox, ScrollView } from "std-widgets.slint";
+
+
+export component MyApp inherits Window {
+    // no-frame: true;
+    background: #2d2d2d;
+    default-font-size: 20px;
+    preferred-width: 800phx;
+    preferred-height: 450phx;
+    width: 800phx;
+    height: 450phx;
+
+    callback add_item(string);
+    in property <[string]> elements;
+
+    VerticalLayout {
+        Rectangle {
+            height: 3rem;
+            TextInput {
+                // single-line: false;
+                // wrap: word-wrap;
+                accepted => {
+                    add_item(self.text);
+                }
+            }
+
+            border-color: black;
+            border-width: 0.05rem;
+
+            background: gray;
+            width: 100%;
+        }
+
+        HorizontalLayout {
+            Rectangle {
+                ScrollView {
+                    VerticalLayout {
+                        alignment: start;
+                        // spacing: 0.5rem;
+                        for e in elements: Text {
+                            text: e;
+                        }
+                    }
+                }
+
+                border-color: black;
+                border-width: 0.05rem;
+                width: 50%;
+                background: gray;
+            }
+
+            Rectangle {
+                border-width: 0.05rem;
+                border-color: black;
+                background: gray;
+                height: 100%;
+                width: 50%;
+            }
+
+            height: 100%;
+        }
+    }
+}
