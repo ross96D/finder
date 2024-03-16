@@ -11,8 +11,9 @@ export component MyApp inherits Window {
     width: 800phx;
     height: 450phx;
 
-    callback add_item(string);
+    callback search(string);
     in property <[string]> elements;
+    in property <string> preview;
 
     VerticalLayout {
         Rectangle {
@@ -21,7 +22,7 @@ export component MyApp inherits Window {
                 // single-line: false;
                 // wrap: word-wrap;
                 accepted => {
-                    add_item(self.text);
+                    search(self.text);
                 }
             }
 
@@ -56,6 +57,9 @@ export component MyApp inherits Window {
                 background: gray;
                 height: 100%;
                 width: 50%;
+                Text {
+                    text: preview;
+                }
             }
 
             height: 100%;
