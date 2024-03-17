@@ -1,4 +1,4 @@
-use std::{error::Error, ffi::OsStr, fmt};
+use std::{error::Error, ffi::OsStr, fmt, fs::File, io::{self, BufRead}, path::Path};
 use grep_searcher::{SearcherBuilder, BinaryDetection, sinks::UTF8};
 use grep_regex::RegexMatcher;
 use ignore::WalkBuilder;
@@ -69,4 +69,34 @@ pub fn search(pattern: &str, path: &OsStr) -> Result<Vec<SearchResult>, Box<dyn 
         }
     }
     Ok(response)   
+}
+
+pub fn preview(path: &Path, line_number: u64, limit: u64) -> Result<String, Box<dyn Error>> {   
+    let mut result: String = String::new();
+    if let Ok(lines) = read_lines(path) {
+        let mut count = 0;
+        for line in lines {
+            match line {
+                Ok(line) => {
+                    if count <= line_number - limit {
+                        // do nothing
+                    } else if count < line_number + limit {
+                        result.push_str(&line);
+                        result.push('\n');
+                    } else {
+                        break;                        
+                    }
+                    count += 1;
+                },
+                Err(_) => continue,
+            }
+        }
+    } 
+    Ok(result)
+}
+
+fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
+where P: AsRef<Path>, {
+    let file = File::open(filename)?;
+    Ok(io::BufReader::new(file).lines())
 }

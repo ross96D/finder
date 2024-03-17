@@ -1,7 +1,8 @@
-use std::{env, rc::Rc, vec};
+use std::{env, path::Path, process::exit, rc::Rc, vec};
 
 mod winit_helpers;
 mod matcher;
+use matcher::preview;
 use winit_helpers::center_window;
 
 use slint::{ComponentHandle, LogicalPosition, ModelRc, SharedString, VecModel, Weak};
@@ -11,7 +12,7 @@ slint::include_modules!();
 fn main() -> Result<(), slint::PlatformError> {
     let app = MyApp::new()?;
     let weak_app: Weak<MyApp> = app.as_weak();
-    app.window().set_position(LogicalPosition::new(500.0, 500.0));
+    // app.window().set_position(LogicalPosition::new(500.0, 500.0));
 
     center_window(app.window());
 
@@ -33,8 +34,15 @@ fn main() -> Result<(), slint::PlatformError> {
         for e in resp {
             vec_model.push(SharedString::from(e.to_string()));
             if e.focus {
-                app.set_preview(SharedString::from(format!("Found match at file {} in line {}", e.file_path, e.line_number)));
-                println!("\n\nJAJAJA {}", SharedString::from(format!("Found match at file {} in line {}", e.file_path, e.line_number)));
+                let preview = match preview(Path::new(&e.file_path), e.line_number, 10) {
+                    Ok(preview) => preview,
+                    Err(err) => {
+                        // TODO log error
+                        eprint!("error getting preview {}", err);
+                        exit(1)
+                    },
+                };
+                app.set_preview(SharedString::from(preview));
             }
         }
     });
