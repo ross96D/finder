@@ -1,18 +1,23 @@
 use std::{env, path::Path, process::exit, rc::Rc, vec};
 
-mod winit_helpers;
 mod matcher;
+mod winit_helpers;
 use matcher::preview;
 use winit_helpers::center_window;
 
-use slint::{ComponentHandle, LogicalPosition, ModelRc, SharedString, VecModel, Weak};
+use slint::{ComponentHandle, ModelRc, SharedString, VecModel, Weak};
 
 slint::include_modules!();
 
 fn main() -> Result<(), slint::PlatformError> {
     let app = MyApp::new()?;
     let weak_app: Weak<MyApp> = app.as_weak();
-    // app.window().set_position(LogicalPosition::new(500.0, 500.0));
+    // TODO see how can i modify the window position
+    // as the default window adapter does not provide a way to do this.
+    let mut position = app.window().position();
+    position.x = 500;
+    position.y = 500;
+    app.window().set_position(position);
 
     center_window(app.window());
 
@@ -27,7 +32,7 @@ fn main() -> Result<(), slint::PlatformError> {
             Err(err) => {
                 // ! TODO handle the error..
                 panic!("{}", err)
-            },
+            }
         };
         // ! TODO handle the error
         let resp = matcher::search(&item, cwd.as_os_str()).unwrap();
@@ -40,7 +45,7 @@ fn main() -> Result<(), slint::PlatformError> {
                         // TODO log error
                         eprint!("error getting preview {}", err);
                         exit(1)
-                    },
+                    }
                 };
                 app.set_preview(SharedString::from(preview));
             }
