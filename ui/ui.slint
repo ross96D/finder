@@ -19,6 +19,7 @@ export component MyApp inherits Window {
         Rectangle {
             height: 3rem;
             TextInput {
+                width: 90%;
                 // single-line: false;
                 // wrap: word-wrap;
                 accepted => {
@@ -36,6 +37,7 @@ export component MyApp inherits Window {
         HorizontalLayout {
             Rectangle {
                 ScrollView {
+                    width: 90%;
                     VerticalLayout {
                         alignment: start;
                         // spacing: 0.5rem;
@@ -58,6 +60,8 @@ export component MyApp inherits Window {
                 height: 100%;
                 width: 50%;
                 Text {
+                    width: 90%;
+                    wrap: word-wrap;
                     text: preview;
                 }
             }
