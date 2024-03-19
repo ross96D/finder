@@ -36,6 +36,7 @@ fn main() -> Result<(), slint::PlatformError> {
         };
         // ! TODO handle the error
         let resp = matcher::search(&item, cwd.as_os_str()).unwrap();
+        vec_model.set_vec(vec![]);
         for e in resp {
             vec_model.push(SharedString::from(e.to_string()));
             if e.focus {
